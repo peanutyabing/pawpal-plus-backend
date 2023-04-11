@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user);
       this.belongsTo(models.species);
       this.belongsTo(models.breed);
+      this.hasMany(models.event);
     }
   }
   Pet.init(

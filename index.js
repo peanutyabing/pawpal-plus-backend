@@ -10,17 +10,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // importing Routers
+const PetRouter = require("./routers/petRouter.js");
 
 // importing Controllers
+const PetController = require("./controllers/petController.js");
 
 // importing DB
 const db = require("./db/models/index.js");
+const { pet, event } = db;
 
 // initializing Controllers -> note the lowercase for the first word
+const petController = new PetController(pet, event);
 
 // inittializing Routers
+const petRouter = new PetRouter(petController).routes();
 
 // using the routers
+app.use("/pets", petRouter);
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
