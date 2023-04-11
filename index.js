@@ -26,7 +26,7 @@ const petController = new PetController(pet, event);
 const petRouter = new PetRouter(petController).routes();
 
 // using the routers
-app.use("/pets", petRouter);
+app.use("/users/:userId/pets", petRouter);
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
