@@ -37,8 +37,6 @@ class PetController {
   addPet = async (req, res) => {
     const { userId } = req.params;
     const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
-    console.log(userId);
-    console.log(speciesId, breedId, name);
     try {
       await this.model.create({
         userId: userId,
@@ -49,6 +47,34 @@ class PetController {
         dateOfBirth: dateOfBirth,
       });
       console.log("added pet");
+      const pets = await this.model.findAll({
+        where: { userId: userId },
+        order: [["species_id"]],
+      });
+      console.log("getting pets");
+      return res.json(pets);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  updatePet = async (req, res) => {
+    const { userId, petId } = req.params;
+    const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
+    try {
+      await this.model.update(
+        {
+          speciesId: speciesId,
+          breedId: breedId,
+          name: name,
+          imageUrl: imageUrl,
+          dateOfBirth: dateOfBirth,
+        },
+        {
+          where: { id: petId },
+        }
+      );
+      console.log("updated pet");
       const pets = await this.model.findAll({
         where: { userId: userId },
         order: [["species_id"]],

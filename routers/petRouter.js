@@ -9,7 +9,7 @@ class PetRouter {
     router.get("/", this.controller.getMyPets);
     router.get("/:petId", this.controller.getOnePet);
     router.post("/", this.controller.addPet);
-    // router.put("/:petId", this.controller.updatePet);
+    router.put("/:petId", this.controller.updatePet);
     return router;
   }
 }
