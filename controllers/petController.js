@@ -25,6 +25,7 @@ class PetController {
           model: this.eventsModel,
           attributes: ["name", "time", "description", "location_details"],
         },
+        order: [[{ model: this.eventsModel }, "time", "DESC"]],
       });
       return res.json(pet);
     } catch (err) {
