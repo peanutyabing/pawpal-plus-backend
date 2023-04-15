@@ -23,9 +23,8 @@ class PetController {
       const pet = await this.model.findByPk(petId, {
         include: {
           model: this.eventsModel,
-          attributes: ["name", "time", "description", "location_details"],
         },
-        order: [[{ model: this.eventsModel }, "time", "DESC"]],
+        order: [[{ model: this.eventsModel }, "startTime", "DESC"]],
       });
       return res.json(pet);
     } catch (err) {
@@ -88,7 +87,7 @@ class PetController {
     try {
       const events = await this.eventsModel.findAll({
         where: { petId: petId },
-        order: [["time", "DESC"]],
+        order: [["startTime", "DESC"]],
       });
       return res.json(events);
     } catch (err) {
@@ -98,13 +97,21 @@ class PetController {
 
   addEvent = async (req, res) => {
     const { petId } = req.params;
-    const { name, time, description, imageUrl, locationDetails, remindMe } =
-      req.body;
+    const {
+      name,
+      startTime,
+      endTime,
+      description,
+      imageUrl,
+      locationDetails,
+      remindMe,
+    } = req.body;
     try {
       await this.eventsModel.create({
         petId,
         name,
-        time,
+        startTime,
+        endTime,
         description,
         imageUrl,
         locationDetails,
@@ -112,7 +119,7 @@ class PetController {
       });
       const events = await this.eventsModel.findAll({
         where: { petId: petId },
-        order: [["time", "DESC"]],
+        order: [["startTime", "DESC"]],
       });
       return res.json(events);
     } catch (err) {
@@ -122,13 +129,21 @@ class PetController {
 
   editEvent = async (req, res) => {
     const { petId, eventId } = req.params;
-    const { name, time, description, imageUrl, locationDetails, remindMe } =
-      req.body;
+    const {
+      name,
+      startTime,
+      endTime,
+      description,
+      imageUrl,
+      locationDetails,
+      remindMe,
+    } = req.body;
     try {
       await this.eventsModel.update(
         {
           name,
-          time,
+          startTime,
+          endTime,
           description,
           imageUrl,
           locationDetails,
@@ -141,7 +156,7 @@ class PetController {
       );
       const events = await this.eventsModel.findAll({
         where: { petId: petId },
-        order: [["time", "DESC"]],
+        order: [["startTime", "DESC"]],
       });
       return res.json(events);
     } catch (err) {
