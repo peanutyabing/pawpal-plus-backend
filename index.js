@@ -17,10 +17,10 @@ const PetController = require("./controllers/petController.js");
 
 // importing DB
 const db = require("./db/models/index.js");
-const { pet, event } = db;
+const { pet, event, species, breed } = db;
 
 // initializing Controllers -> note the lowercase for the first word
-const petController = new PetController(pet, event);
+const petController = new PetController(pet, event, species, breed);
 
 // inittializing Routers
 const petRouter = new PetRouter(petController).routes();

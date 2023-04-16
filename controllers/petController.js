@@ -1,9 +1,35 @@
 class PetController {
-  constructor(model, eventsModel) {
+  constructor(model, eventsModel, speciesModel, breedsModel) {
     this.model = model;
     this.eventsModel = eventsModel;
+    this.speciesModel = speciesModel;
+    this.breedsModel = breedsModel;
   }
 
+  // Pet categorization
+  getSpecies = async (req, res) => {
+    try {
+      const species = await this.speciesModel.findAll({
+        order: [["name"]],
+      });
+      return res.json(species);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getSpeciesBreeds = async (req, res) => {
+    const { speciesId } = req.params;
+    try {
+      const oneSpecies = await this.speciesModel.findByPk(speciesId);
+      const oneSpeciesBreeds = await oneSpecies.getBreeds();
+      return res.json(oneSpeciesBreeds);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  // Pet profiles
   getMyPets = async (req, res) => {
     const { userId } = req.params;
     try {
@@ -81,6 +107,7 @@ class PetController {
     }
   };
 
+  // Pet events
   getPetEvents = async (req, res) => {
     const { petId } = req.params;
     console.log("params", req.params);

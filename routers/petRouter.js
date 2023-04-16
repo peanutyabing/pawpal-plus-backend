@@ -6,6 +6,10 @@ class PetRouter {
     this.controller = controller;
   }
   routes() {
+    // Pet categorization
+    router.get("/species", this.controller.getSpecies);
+    router.get("/species/:speciesId/breeds", this.controller.getSpeciesBreeds);
+
     // Pet profiles
     router.get("/", this.controller.getMyPets);
     router.get("/:petId", this.controller.getOnePet);
