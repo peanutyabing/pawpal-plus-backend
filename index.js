@@ -11,22 +11,27 @@ app.use(express.urlencoded({ extended: false }));
 
 // importing Routers
 const PetRouter = require("./routers/petRouter.js");
+const PostRouter = require("./routers/postRouter.js");
 
 // importing Controllers
 const PetController = require("./controllers/petController.js");
+const PostController = require("./controllers/postController.js");
 
 // importing DB
 const db = require("./db/models/index.js");
-const { pet, event, species, breed } = db;
+const { pet, event, posts, species, breed } = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const petController = new PetController(pet, event, species, breed);
+const postController = new PostController(posts);
 
 // inittializing Routers
 const petRouter = new PetRouter(petController).routes();
+const postRouter = new PostRouter(postController).routes();
 
 // using the routers
 app.use("/users/:userId/pets", petRouter);
+app.use("/users/:userId/posts", postRouter);
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
