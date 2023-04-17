@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       speciesId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: { model: "species", key: "id" },
       },
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,

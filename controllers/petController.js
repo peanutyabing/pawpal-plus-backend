@@ -1,12 +1,37 @@
 class PetController {
-  constructor(model, eventsModel) {
+  constructor(model, eventsModel, speciesModel, breedsModel) {
     this.model = model;
     this.eventsModel = eventsModel;
+    this.speciesModel = speciesModel;
+    this.breedsModel = breedsModel;
   }
 
+  // Pet categorization
+  getSpecies = async (req, res) => {
+    try {
+      const species = await this.speciesModel.findAll({
+        order: [["name"]],
+      });
+      return res.json(species);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getSpeciesBreeds = async (req, res) => {
+    const { speciesId } = req.params;
+    try {
+      const oneSpecies = await this.speciesModel.findByPk(speciesId);
+      const oneSpeciesBreeds = await oneSpecies.getBreeds();
+      return res.json(oneSpeciesBreeds);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  // Pet profiles
   getMyPets = async (req, res) => {
     const { userId } = req.params;
-    console.log("params", req.params);
     try {
       const pets = await this.model.findAll({
         where: { userId: userId },
@@ -19,14 +44,14 @@ class PetController {
   };
 
   getOnePet = async (req, res) => {
-    const { petId } = req.params;
-    console.log("params", req.params);
+    const { userId, petId } = req.params;
     try {
-      const pet = await this.model.findByPk(petId, {
+      const pet = await this.model.findAll({
+        where: { userId, id: petId },
         include: {
           model: this.eventsModel,
-          attributes: ["name", "time", "description", "location_details"],
         },
+        order: [[{ model: this.eventsModel }, "startTime", "DESC"]],
       });
       return res.json(pet);
     } catch (err) {
@@ -37,23 +62,46 @@ class PetController {
   addPet = async (req, res) => {
     const { userId } = req.params;
     const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
-    console.log(userId);
-    console.log(speciesId, breedId, name);
     try {
       await this.model.create({
-        userId: userId,
-        speciesId: speciesId,
-        breedId: breedId,
-        name: name,
-        imageUrl: imageUrl,
-        dateOfBirth: dateOfBirth,
+        userId,
+        speciesId,
+        breedId,
+        name,
+        imageUrl,
+        dateOfBirth,
       });
-      console.log("added pet");
       const pets = await this.model.findAll({
         where: { userId: userId },
         order: [["species_id"]],
       });
-      console.log("getting pets");
+      return res.json(pets);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  updatePet = async (req, res) => {
+    const { userId, petId } = req.params;
+    const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
+    try {
+      await this.model.update(
+        {
+          speciesId,
+          breedId,
+          name,
+          imageUrl,
+          dateOfBirth,
+          updatedAt: new Date(),
+        },
+        {
+          where: { id: petId },
+        }
+      );
+      const pets = await this.model.findAll({
+        where: { userId: userId },
+        order: [["species_id"]],
+      });
       return res.json(pets);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
