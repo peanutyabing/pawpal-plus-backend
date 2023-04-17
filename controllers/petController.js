@@ -44,9 +44,10 @@ class PetController {
   };
 
   getOnePet = async (req, res) => {
-    const { petId } = req.params;
+    const { userId, petId } = req.params;
     try {
-      const pet = await this.model.findByPk(petId, {
+      const pet = await this.model.findAll({
+        where: { userId, id: petId },
         include: {
           model: this.eventsModel,
         },
@@ -102,90 +103,6 @@ class PetController {
         order: [["species_id"]],
       });
       return res.json(pets);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  // Pet events
-  getPetEvents = async (req, res) => {
-    const { petId } = req.params;
-    console.log("params", req.params);
-    try {
-      const events = await this.eventsModel.findAll({
-        where: { petId: petId },
-        order: [["startTime", "DESC"]],
-      });
-      return res.json(events);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  addEvent = async (req, res) => {
-    const { petId } = req.params;
-    const {
-      name,
-      startTime,
-      endTime,
-      description,
-      imageUrl,
-      locationDetails,
-      remindMe,
-    } = req.body;
-    try {
-      await this.eventsModel.create({
-        petId,
-        name,
-        startTime,
-        endTime,
-        description,
-        imageUrl,
-        locationDetails,
-        remindMe,
-      });
-      const events = await this.eventsModel.findAll({
-        where: { petId: petId },
-        order: [["startTime", "DESC"]],
-      });
-      return res.json(events);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  editEvent = async (req, res) => {
-    const { petId, eventId } = req.params;
-    const {
-      name,
-      startTime,
-      endTime,
-      description,
-      imageUrl,
-      locationDetails,
-      remindMe,
-    } = req.body;
-    try {
-      await this.eventsModel.update(
-        {
-          name,
-          startTime,
-          endTime,
-          description,
-          imageUrl,
-          locationDetails,
-          remindMe,
-          updatedAt: new Date(),
-        },
-        {
-          where: { id: eventId },
-        }
-      );
-      const events = await this.eventsModel.findAll({
-        where: { petId: petId },
-        order: [["startTime", "DESC"]],
-      });
-      return res.json(events);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

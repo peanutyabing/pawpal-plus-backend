@@ -16,10 +16,6 @@ class PetRouter {
     router.post("/", this.controller.addPet);
     router.put("/:petId", this.controller.updatePet);
 
-    // Pet events
-    router.get("/:petId/events", this.controller.getPetEvents);
-    router.post("/:petId/events", this.controller.addEvent);
-    router.put("/:petId/events/:eventId", this.controller.editEvent);
     return router;
   }
 }
