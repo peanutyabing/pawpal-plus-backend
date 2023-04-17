@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Species.init(
     {
-      name: DataTypes.STRING,
+      name: { type: DataTypes.STRING, allowNull: false },
     },
     {
       sequelize,

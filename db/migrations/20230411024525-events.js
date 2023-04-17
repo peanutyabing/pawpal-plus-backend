@@ -18,8 +18,21 @@ module.exports = {
           key: "id",
         },
       },
+      category_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "categories",
+          key: "id",
+        },
+      },
+      subcategory_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "subcategories",
+          key: "id",
+        },
+      },
       name: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       start_time: {
@@ -29,7 +42,16 @@ module.exports = {
       end_time: {
         type: Sequelize.DATE,
       },
+      cause_for_concern: {
+        type: Sequelize.BOOLEAN,
+      },
       description: {
+        type: Sequelize.STRING,
+      },
+      data: {
+        type: Sequelize.INTEGER,
+      },
+      unit: {
         type: Sequelize.STRING,
       },
       image_url: {
