@@ -15,6 +15,10 @@ class EventRouter {
       "/categories/:categoryId/subcategories",
       this.controller.getSubcategories
     );
+    router.post(
+      "/categories/:categoryId/subcategories",
+      this.controller.addSubcategory
+    );
     return router;
   }
 }
