@@ -9,7 +9,7 @@ module.exports = {
         {
           pet_id: 1,
           category_id: 3,
-          subcategory_id: 2,
+          subcategory_id: 8,
           start_time: new Date("2023-04-13T05:00:00.000Z"),
           end_time: new Date("2023-04-13T05:15:00.000Z"),
           cause_for_concern: false,
@@ -21,7 +21,7 @@ module.exports = {
         {
           pet_id: 1,
           category_id: 3,
-          subcategory_id: 2,
+          subcategory_id: 7,
           start_time: new Date("2023-04-14T01:00:00.000Z"),
           end_time: new Date("2023-04-14T03:35:00.000Z"),
           cause_for_concern: false,
@@ -33,7 +33,7 @@ module.exports = {
         {
           pet_id: 2,
           category_id: 6,
-          subcategory_id: 1,
+          subcategory_id: 15,
           start_time: new Date(new Date() - 60000),
           end_time: new Date(),
           cause_for_concern: false,
@@ -45,7 +45,7 @@ module.exports = {
         {
           pet_id: 1,
           category_id: 5,
-          subcategory_id: 1,
+          subcategory_id: 11,
           start_time: new Date(new Date() - 60000),
           end_time: new Date(),
           cause_for_concern: false,

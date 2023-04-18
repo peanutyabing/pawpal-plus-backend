@@ -11,6 +11,16 @@ class EventController {
     try {
       const events = await this.model.findAll({
         where: { petId: petId },
+        include: [
+          {
+            model: this.categoriesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.subcategoriesModel,
+            attributes: ["name"],
+          },
+        ],
         order: [["startTime", "DESC"]],
       });
       return res.json(events);
