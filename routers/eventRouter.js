@@ -9,6 +9,12 @@ class EventRouter {
     router.get("/", this.controller.getPetEvents);
     router.post("/", this.controller.addEvent);
     router.put("/:eventId", this.controller.editEvent);
+
+    router.get("/categories", this.controller.getCategories);
+    router.get(
+      "/categories/:categoryId/subcategories",
+      this.controller.getSubcategories
+    );
     return router;
   }
 }

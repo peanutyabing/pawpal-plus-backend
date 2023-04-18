@@ -111,6 +111,26 @@ class EventController {
   };
 
   // Event categorization
+  getCategories = async (req, res) => {
+    try {
+      const categories = await this.categoriesModel.findAll();
+      return res.json(categories);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getSubcategories = async (req, res) => {
+    const { categoryId } = req.params;
+    try {
+      const subcategories = await this.subcategoriesModel.findAll({
+        where: { categoryId },
+      });
+      return res.json(subcategories);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = EventController;
