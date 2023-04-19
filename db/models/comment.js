@@ -1,13 +1,13 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Comments extends Model {
+  class Comment extends Model {
     static associate(models) {
-      this.belongsTo(models.users);
-      this.belongsTo(models.posts);
+      this.belongsTo(models.user);
+      this.belongsTo(models.post);
     }
   }
-  Comments.init(
+  Comment.init(
     {
       userId: {
         type: DataTypes.INTEGER,
@@ -17,9 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       postId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "species", key: "id" },
+        references: { model: "post", key: "id" },
       },
-      content: DataTypes.STRING,
+      content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
@@ -27,5 +30,5 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
-  return Comments;
+  return Comment;
 };
