@@ -11,6 +11,16 @@ class EventController {
     try {
       const events = await this.model.findAll({
         where: { petId: petId },
+        include: [
+          {
+            model: this.categoriesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.subcategoriesModel,
+            attributes: ["name"],
+          },
+        ],
         order: [["startTime", "DESC"]],
       });
       return res.json(events);
@@ -25,7 +35,6 @@ class EventController {
     const {
       categoryId,
       subcategoryId,
-      name,
       startTime,
       endTime,
       causeForConcern,
@@ -33,7 +42,6 @@ class EventController {
       data,
       unit,
       imageUrl,
-      locationDetails,
       remindMe,
     } = req.body;
     console.log(categoryId, subcategoryId);
@@ -42,7 +50,6 @@ class EventController {
         petId,
         categoryId,
         subcategoryId,
-        name,
         startTime,
         endTime,
         causeForConcern,
@@ -50,7 +57,6 @@ class EventController {
         data,
         unit,
         imageUrl,
-        locationDetails,
         remindMe,
       });
       const events = await this.model.findAll({
@@ -68,7 +74,6 @@ class EventController {
     const {
       categoryId,
       subcategoryId,
-      name,
       startTime,
       endTime,
       causeForConcern,
@@ -76,7 +81,6 @@ class EventController {
       data,
       unit,
       imageUrl,
-      locationDetails,
       remindMe,
     } = req.body;
     try {
@@ -84,7 +88,6 @@ class EventController {
         {
           categoryId,
           subcategoryId,
-          name,
           startTime,
           endTime,
           causeForConcern,
@@ -92,7 +95,6 @@ class EventController {
           data,
           unit,
           imageUrl,
-          locationDetails,
           remindMe,
           updatedAt: new Date(),
         },
@@ -111,6 +113,40 @@ class EventController {
   };
 
   // Event categorization
+  getCategories = async (req, res) => {
+    try {
+      const categories = await this.categoriesModel.findAll();
+      return res.json(categories);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getSubcategories = async (req, res) => {
+    const { categoryId } = req.params;
+    try {
+      const subcategories = await this.subcategoriesModel.findAll({
+        where: { categoryId },
+      });
+      return res.json(subcategories);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  addSubcategory = async (req, res) => {
+    const { categoryId } = req.params;
+    const { name } = req.body;
+    try {
+      const newSubcategory = await this.subcategoriesModel.create({
+        categoryId,
+        name,
+      });
+      return res.json(newSubcategory);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = EventController;

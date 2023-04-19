@@ -19,6 +19,7 @@ module.exports = {
         },
       },
       category_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "categories",
@@ -26,14 +27,12 @@ module.exports = {
         },
       },
       subcategory_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "subcategories",
           key: "id",
         },
-      },
-      name: {
-        type: Sequelize.STRING,
       },
       start_time: {
         allowNull: false,
@@ -55,9 +54,6 @@ module.exports = {
         type: Sequelize.STRING,
       },
       image_url: {
-        type: Sequelize.STRING,
-      },
-      location_details: {
         type: Sequelize.STRING,
       },
       remind_me: {
