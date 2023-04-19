@@ -22,7 +22,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          name: "Toileting",
+          name: "Toilet",
           created_at: new Date(),
           updated_at: new Date(),
         },

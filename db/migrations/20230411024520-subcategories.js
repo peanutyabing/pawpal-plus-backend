@@ -23,6 +23,10 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
+      min_hours_lapsed: {
+        type: Sequelize.INTEGER,
+        defaultValue: 72,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

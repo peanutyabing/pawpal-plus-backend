@@ -12,11 +12,13 @@ app.use(express.urlencoded({ extended: false }));
 // importing Routers
 const PetRouter = require("./routers/petRouter.js");
 const EventRouter = require("./routers/eventRouter.js");
+const ReminderRouter = require("./routers/reminderRouter.js");
 const PostRouter = require("./routers/postRouter.js");
 
 // importing Controllers
 const PetController = require("./controllers/petController.js");
 const EventController = require("./controllers/eventController.js");
+const ReminderController = require("./controllers/reminderController.js");
 const PostController = require("./controllers/postController.js");
 
 // importing DB
@@ -26,16 +28,19 @@ const { pet, event, posts, species, breed, category, subcategory } = db;
 // initializing Controllers -> note the lowercase for the first word
 const petController = new PetController(pet, event, species, breed);
 const eventController = new EventController(event, category, subcategory);
+const reminderController = new ReminderController(event, pet, subcategory);
 const postController = new PostController(posts);
 
 // inittializing Routers
 const petRouter = new PetRouter(petController).routes();
 const eventRouter = new EventRouter(eventController).routes();
+const reminderRouter = new ReminderRouter(reminderController).routes();
 const postRouter = new PostRouter(postController).routes();
 
 // using the routers
 app.use("/users/:userId/pets", petRouter);
 app.use("/users/:userId/pets/:petId/events", eventRouter);
+app.use("/users/:userId/reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);
 
 app.listen(PORT, () => {
