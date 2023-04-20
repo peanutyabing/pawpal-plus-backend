@@ -20,7 +20,7 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
-      auth_token: {
+      password: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -28,11 +28,9 @@ module.exports = {
         type: Sequelize.STRING,
       },
       country: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       region: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       city_town: {

@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       username: { type: DataTypes.STRING, allowNull: false },
       email: { type: DataTypes.STRING, allowNull: false },
-      authToken: { type: DataTypes.STRING, allowNull: false },
+      password: { type: DataTypes.STRING, allowNull: false },
       imageUrl: DataTypes.STRING,
-      country: { type: DataTypes.STRING, allowNull: false },
-      region: { type: DataTypes.STRING, allowNull: false },
+      country: DataTypes.STRING,
+      region: DataTypes.STRING,
       cityTown: DataTypes.STRING,
     },
     {

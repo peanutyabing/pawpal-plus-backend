@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 class PetRouter {
-  constructor(controller) {
+  constructor(controller, authenticateToken) {
     this.controller = controller;
+    this.authenticateToken = authenticateToken;
   }
   routes() {
     // Pet categorization
@@ -11,10 +12,10 @@ class PetRouter {
     router.get("/species/:speciesId/breeds", this.controller.getSpeciesBreeds);
 
     // Pet profiles
-    router.get("/", this.controller.getMyPets);
-    router.get("/:petId", this.controller.getOnePet);
-    router.post("/", this.controller.addPet);
-    router.put("/:petId", this.controller.updatePet);
+    router.get("/", this.authenticateToken, this.controller.getMyPets);
+    router.get("/:petId", this.authenticateToken, this.controller.getOnePet);
+    router.post("/", this.authenticateToken, this.controller.addPet);
+    router.put("/:petId", this.authenticateToken, this.controller.updatePet);
 
     return router;
   }
