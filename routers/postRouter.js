@@ -7,7 +7,7 @@ class PostRouter {
   }
   routes() {
     router.get("/", this.controller.getPosts);
-
+    router.get("/:postId", this.controller.getSinglePost);
     return router;
   }
 }
