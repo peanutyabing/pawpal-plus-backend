@@ -59,6 +59,10 @@ module.exports = {
       remind_me: {
         type: Sequelize.BOOLEAN,
       },
+      latest: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

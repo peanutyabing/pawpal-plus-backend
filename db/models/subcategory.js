@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         references: { model: "category", key: "id" },
       },
       name: { type: DataTypes.STRING, allowNull: false },
+      minHoursLapsed: {
+        type: DataTypes.INTEGER,
+        defaultValue: 72,
+      },
     },
     {
       sequelize,

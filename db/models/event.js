@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       unit: DataTypes.STRING,
       imageUrl: DataTypes.STRING,
       remindMe: { type: DataTypes.BOOLEAN, defaultValue: false },
+      latest: { type: DataTypes.BOOLEAN, allowNull: false },
     },
     {
       sequelize,
