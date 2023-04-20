@@ -31,7 +31,6 @@ class EventController {
 
   addEvent = async (req, res) => {
     const { petId } = req.params;
-    console.log(petId);
     const {
       categoryId,
       subcategoryId,
@@ -44,7 +43,9 @@ class EventController {
       imageUrl,
       remindMe,
     } = req.body;
-    console.log(categoryId, subcategoryId);
+
+    await this.updatePreviousLatest(petId, subcategoryId);
+
     try {
       await this.model.create({
         petId,
@@ -58,7 +59,9 @@ class EventController {
         unit,
         imageUrl,
         remindMe,
+        latest: true, // A new event is always the latest of its subcategory for that pet
       });
+
       const events = await this.model.findAll({
         where: { petId: petId },
         order: [["startTime", "DESC"]],
@@ -66,6 +69,23 @@ class EventController {
       return res.json(events);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  updatePreviousLatest = async (petId, subcategoryId) => {
+    try {
+      await this.model.update(
+        { latest: false, updatedAt: new Date() },
+        {
+          where: {
+            latest: true,
+            petId,
+            subcategoryId,
+          },
+        }
+      );
+    } catch (err) {
+      return err;
     }
   };
 
