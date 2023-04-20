@@ -66,6 +66,7 @@ class ReminderController {
           content: `Reminder: it has been ${displayTime(hoursSince)} since ${
             event.pet.name
           }'s last ${event.subcategory.name.toLowerCase()}`,
+          showReminder: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
