@@ -9,7 +9,8 @@ class UserController {
   }
 
   signUp = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, imageUrl, country, region, cityTown } =
+      req.body;
     if (!username || !email || !password) {
       return res
         .status(400)
@@ -20,13 +21,14 @@ class UserController {
       username,
       email,
       password: hashedPassword,
+      imageUrl,
+      country,
+      region,
+      cityTown,
     });
 
     const payload = { id: newUser.id, username };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
-
+    const token = this.generateToken(payload);
     return res.json({ success: true, token });
   };
 
@@ -42,10 +44,18 @@ class UserController {
     }
 
     const payload = { id: user.id, username: user.username };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = this.generateToken(payload);
+    return res.json({
+      success: true,
+      msg: "user authenticated",
+      token,
+    });
+  };
+
+  generateToken = (payload) => {
+    return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    return res.json({ success: true, msg: "user authenticated", token });
   };
 }
 
