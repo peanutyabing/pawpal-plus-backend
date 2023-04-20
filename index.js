@@ -52,7 +52,7 @@ const reminderController = new ReminderController(event, pet, subcategory);
 const postController = new PostController(posts);
 
 // inittializing Routers
-const userRouter = new UserRouter(userController).routes();
+const userRouter = new UserRouter(userController, authenticateToken).routes();
 const petRouter = new PetRouter(petController, authenticateToken).routes();
 const eventRouter = new EventRouter(eventController).routes();
 const reminderRouter = new ReminderRouter(reminderController).routes();

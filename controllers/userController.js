@@ -8,6 +8,7 @@ class UserController {
     this.model = model;
   }
 
+  // Auth
   signUp = async (req, res) => {
     const { username, email, password, imageUrl, country, region, cityTown } =
       req.body;
@@ -56,6 +57,17 @@ class UserController {
     return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
+  };
+
+  // User profiles
+  getUserProfile = async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const currentUser = await this.model.findOne({ id: userId });
+      res.json(currentUser);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   };
 }
 
