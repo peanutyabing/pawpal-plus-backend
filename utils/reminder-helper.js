@@ -15,6 +15,9 @@ const displayTime = (timeInHours) => {
     const dayString = timeInDays > 1 ? "days" : "day";
     const remainingHours = Math.floor(timeInHours % 24);
     const hourString = remainingHours > 1 ? "hours" : "hour";
+    if (!remainingHours) {
+      return `${timeInDays} ${dayString}`;
+    }
     return `${timeInDays} ${dayString} ${remainingHours} ${hourString}`;
   }
 };

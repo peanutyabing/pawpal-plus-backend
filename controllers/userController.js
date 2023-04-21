@@ -30,14 +30,18 @@ class UserController {
 
     const payload = { id: newUser.id, username };
     const token = this.generateToken(payload);
-    return res.json({ success: true, token });
+    return res.json({ success: true, token, id: newUser.id });
   };
 
   signIn = async (req, res) => {
     const { email, password } = req.body;
     const user = await this.model.findOne({ where: { email } });
+    if (!user) {
+      return res
+        .status(403)
+        .json({ success: false, msg: "incorrect user email" });
+    }
     const compare = await bcrypt.compare(password, user.password);
-
     if (!compare) {
       return res
         .status(403)
@@ -50,6 +54,7 @@ class UserController {
       success: true,
       msg: "user authenticated",
       token,
+      id: user.id,
     });
   };
 

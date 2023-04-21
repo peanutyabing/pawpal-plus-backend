@@ -55,7 +55,10 @@ const postController = new PostController(posts);
 const userRouter = new UserRouter(userController, authenticateToken).routes();
 const petRouter = new PetRouter(petController, authenticateToken).routes();
 const eventRouter = new EventRouter(eventController).routes();
-const reminderRouter = new ReminderRouter(reminderController).routes();
+const reminderRouter = new ReminderRouter(
+  reminderController,
+  authenticateToken
+).routes();
 const postRouter = new PostRouter(postController).routes();
 
 // using the routers

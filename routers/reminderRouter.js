@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 class ReminderRouter {
-  constructor(controller) {
+  constructor(controller, authenticateToken) {
     this.controller = controller;
+    this.authenticateToken = authenticateToken;
   }
   routes() {
-    router.get("/", this.controller.getReminders);
+    router.get("/", this.authenticateToken, this.controller.getReminders);
     return router;
   }
 }
