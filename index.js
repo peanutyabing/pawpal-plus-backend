@@ -2,13 +2,14 @@ const cors = require("cors");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const cookieParser = require("cookie-parser");
 const PORT = process.env.PORT;
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 const authenticateToken = (req, res, next) => {
   // Request header will include: Bearer <long and encrypted token>
@@ -28,6 +29,7 @@ const authenticateToken = (req, res, next) => {
 
 // importing Routers
 const UserRouter = require("./routers/userRouter.js");
+const AuthRouter = require("./routers/authRouter.js");
 const PetRouter = require("./routers/petRouter.js");
 const EventRouter = require("./routers/eventRouter.js");
 const ReminderRouter = require("./routers/reminderRouter.js");
@@ -35,6 +37,7 @@ const PostRouter = require("./routers/postRouter.js");
 
 // importing Controllers
 const UserController = require("./controllers/userController.js");
+const AuthController = require("./controllers/authController.js");
 const PetController = require("./controllers/petController.js");
 const EventController = require("./controllers/eventController.js");
 const ReminderController = require("./controllers/reminderController.js");
@@ -46,6 +49,7 @@ const { user, pet, event, posts, species, breed, category, subcategory } = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const userController = new UserController(user);
+const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
 const eventController = new EventController(event, category, subcategory);
 const reminderController = new ReminderController(event, pet, subcategory);
@@ -53,6 +57,7 @@ const postController = new PostController(posts);
 
 // inittializing Routers
 const userRouter = new UserRouter(userController, authenticateToken).routes();
+const authRouter = new AuthRouter(authController).routes();
 const petRouter = new PetRouter(petController, authenticateToken).routes();
 const eventRouter = new EventRouter(eventController).routes();
 const reminderRouter = new ReminderRouter(
@@ -63,6 +68,7 @@ const postRouter = new PostRouter(postController).routes();
 
 // using the routers
 app.use("/users", userRouter);
+app.use("/auth", authRouter);
 app.use("/users/:userId/pets", petRouter);
 app.use("/users/:userId/pets/:petId/events", eventRouter);
 app.use("/users/:userId/reminders", reminderRouter);

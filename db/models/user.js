@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       username: { type: DataTypes.STRING, allowNull: false },
       email: { type: DataTypes.STRING, allowNull: false },
       password: { type: DataTypes.STRING, allowNull: false },
+      refreshToken: DataTypes.STRING,
       imageUrl: DataTypes.STRING,
       country: DataTypes.STRING,
       region: DataTypes.STRING,
