@@ -11,7 +11,10 @@ class UserController {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
     try {
-      const currentUser = await this.model.findOne({ where: { id: userId } });
+      const currentUser = await this.model.findOne({
+        where: { id: userId },
+        attributes: { exclude: ["password", "refresh_token"] },
+      });
       return res.json(currentUser);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

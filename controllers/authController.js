@@ -71,7 +71,6 @@ class AuthController {
 
   refreshToken = async (req, res) => {
     const cookies = req.cookies;
-    console.log("cookies >>>>>>>>>>", cookies);
     if (!cookies?.jwt) {
       return res.sendStatus(401);
     }
