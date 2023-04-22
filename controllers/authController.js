@@ -31,8 +31,8 @@ class AuthController {
     const refreshToken = this.generateToken(payload, true);
     this.saveToken(refreshToken, newUser.id);
     res.cookie("jwt", refreshToken, {
-      httpOnly: true,
       sameSite: "None",
+      secure: true,
     });
     return res.json({ success: true, token, id: newUser.id });
   };
@@ -57,8 +57,8 @@ class AuthController {
     const refreshToken = this.generateToken(payload, true);
     this.saveToken(refreshToken, user.id);
     res.cookie("jwt", refreshToken, {
-      httpOnly: true,
       sameSite: "None",
+      secure: true,
     });
     return res.json({
       success: true,
@@ -70,6 +70,7 @@ class AuthController {
 
   refreshToken = async (req, res) => {
     const cookies = req.cookies;
+    console.log("cookies >>>>>>>>>>", cookies);
     if (!cookies?.jwt) {
       return res.sendStatus(401);
     }
@@ -122,16 +123,16 @@ class AuthController {
     const foundUser = await this.model.findOne({ where: { refreshToken } });
     if (!foundUser) {
       res.clearCookie("jwt", {
-        httpOnly: true,
         sameSite: "None",
+        secure: true,
       });
       return res.sendStatus(204);
     }
     try {
       await foundUser.update({ refreshToken: "" });
       res.clearCookie("jwt", {
-        httpOnly: true,
         sameSite: "None",
+        secure: true,
       });
       return res.sendStatus(204);
     } catch (err) {
