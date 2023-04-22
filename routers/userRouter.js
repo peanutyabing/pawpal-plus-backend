@@ -7,11 +7,7 @@ class UserRouter {
     this.authenticateToken = authenticateToken;
   }
   routes() {
-    router.get(
-      "/:userId",
-      this.authenticateToken,
-      this.controller.getUserProfile
-    );
+    router.get("/", this.authenticateToken, this.controller.getUserProfile);
 
     return router;
   }

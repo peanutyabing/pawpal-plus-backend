@@ -1,16 +1,27 @@
+const getUserIdFromToken = require("../utils/auth-helper.js");
+
 class EventController {
-  constructor(model, categoriesModel, subcategoriesModel) {
+  constructor(model, categoriesModel, subcategoriesModel, petsModel) {
     this.model = model;
     this.categoriesModel = categoriesModel;
     this.subcategoriesModel = subcategoriesModel;
+    this.petsModel = petsModel;
   }
 
   // Event content
   getPetEvents = async (req, res) => {
+    const userId = getUserIdFromToken(req);
     const { petId } = req.params;
     try {
+      await this.petsModel.findOne({
+        where: { id: petId, userId },
+      });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: "Pet not found" });
+    }
+    try {
       const events = await this.model.findAll({
-        where: { petId: petId },
+        where: { petId },
         include: [
           {
             model: this.categoriesModel,
@@ -30,7 +41,15 @@ class EventController {
   };
 
   addEvent = async (req, res) => {
+    const userId = getUserIdFromToken(req);
     const { petId } = req.params;
+    try {
+      await this.petsModel.findOne({
+        where: { id: petId, userId },
+      });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: "Pet not found" });
+    }
     const {
       categoryId,
       subcategoryId,
@@ -90,7 +109,15 @@ class EventController {
   };
 
   editEvent = async (req, res) => {
+    const userId = getUserIdFromToken(req);
     const { petId, eventId } = req.params;
+    try {
+      await this.petsModel.findOne({
+        where: { id: petId, userId },
+      });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: "Pet not found" });
+    }
     const {
       categoryId,
       subcategoryId,

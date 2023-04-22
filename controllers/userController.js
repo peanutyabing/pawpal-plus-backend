@@ -1,4 +1,5 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 class UserController {
   constructor(model) {
@@ -6,10 +7,12 @@ class UserController {
   }
 
   getUserProfile = async (req, res) => {
-    const { userId } = req.params;
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
     try {
-      const currentUser = await this.model.findOne({ id: userId });
-      res.json(currentUser);
+      const currentUser = await this.model.findOne({ where: { id: userId } });
+      return res.json(currentUser);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

@@ -1,3 +1,5 @@
+const getUserIdFromToken = require("../utils/auth-helper.js");
+
 class PetController {
   constructor(model, eventsModel, speciesModel, breedsModel) {
     this.model = model;
@@ -31,11 +33,11 @@ class PetController {
 
   // Pet profiles
   getMyPets = async (req, res) => {
-    const { userId } = req.params;
+    const userId = getUserIdFromToken(req);
     try {
       const pets = await this.model.findAll({
-        where: { userId: userId },
-        order: [["species_id"]],
+        where: { userId },
+        order: [["created_at", "DESC"]],
       });
       return res.json(pets);
     } catch (err) {
@@ -44,7 +46,8 @@ class PetController {
   };
 
   getOnePet = async (req, res) => {
-    const { userId, petId } = req.params;
+    const userId = getUserIdFromToken(req);
+    const { petId } = req.params;
     try {
       const pet = await this.model.findAll({
         where: { userId, id: petId },
@@ -60,7 +63,7 @@ class PetController {
   };
 
   addPet = async (req, res) => {
-    const { userId } = req.params;
+    const userId = getUserIdFromToken(req);
     const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
     try {
       await this.model.create({
@@ -72,7 +75,7 @@ class PetController {
         dateOfBirth,
       });
       const pets = await this.model.findAll({
-        where: { userId: userId },
+        where: { userId },
         order: [["species_id"]],
       });
       return res.json(pets);
@@ -82,7 +85,8 @@ class PetController {
   };
 
   updatePet = async (req, res) => {
-    const { userId, petId } = req.params;
+    const userId = getUserIdFromToken(req);
+    const { petId } = req.params;
     const { speciesId, breedId, name, imageUrl, dateOfBirth } = req.body;
     try {
       await this.model.update(
@@ -99,7 +103,7 @@ class PetController {
         }
       );
       const pets = await this.model.findAll({
-        where: { userId: userId },
+        where: { userId },
         order: [["species_id"]],
       });
       return res.json(pets);

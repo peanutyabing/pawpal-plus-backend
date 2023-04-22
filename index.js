@@ -56,7 +56,7 @@ const { user, pet, event, posts, species, breed, category, subcategory } = db;
 const userController = new UserController(user);
 const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
-const eventController = new EventController(event, category, subcategory);
+const eventController = new EventController(event, category, subcategory, pet);
 const reminderController = new ReminderController(event, pet, subcategory);
 const postController = new PostController(posts);
 
@@ -64,7 +64,10 @@ const postController = new PostController(posts);
 const userRouter = new UserRouter(userController, authenticateToken).routes();
 const authRouter = new AuthRouter(authController).routes();
 const petRouter = new PetRouter(petController, authenticateToken).routes();
-const eventRouter = new EventRouter(eventController).routes();
+const eventRouter = new EventRouter(
+  eventController,
+  authenticateToken
+).routes();
 const reminderRouter = new ReminderRouter(
   reminderController,
   authenticateToken
@@ -72,11 +75,11 @@ const reminderRouter = new ReminderRouter(
 const postRouter = new PostRouter(postController).routes();
 
 // using the routers
-app.use("/users", userRouter);
+app.use("/user-profile", userRouter);
 app.use("/auth", authRouter);
-app.use("/users/:userId/pets", petRouter);
-app.use("/users/:userId/pets/:petId/events", eventRouter);
-app.use("/users/:userId/reminders", reminderRouter);
+app.use("/my-pets", petRouter);
+app.use("/my-pets/:petId/events", eventRouter);
+app.use("/my-reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);
 
 app.listen(PORT, () => {
