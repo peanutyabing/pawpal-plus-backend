@@ -8,6 +8,7 @@ class UserRouter {
   }
   routes() {
     router.get("/", this.authenticateToken, this.controller.getUserProfile);
+    router.post("/check-if-exist", this.controller.checkIfUserExists);
 
     return router;
   }

@@ -20,6 +20,22 @@ class UserController {
       return res.status(400).json({ error: true, msg: err });
     }
   };
+
+  checkIfUserExists = async (req, res) => {
+    const attribute = Object.keys(req.body)[0];
+    try {
+      const foundUser = await this.model.findOne({
+        where: { [attribute]: req.body[attribute] },
+      });
+      if (foundUser) {
+        return res.json({ userFound: true });
+      } else {
+        return res.json({ userFound: false });
+      }
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = UserController;
