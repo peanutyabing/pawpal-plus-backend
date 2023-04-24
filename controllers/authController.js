@@ -9,8 +9,7 @@ class AuthController {
   }
 
   signUp = async (req, res) => {
-    const { username, email, password, imageUrl, country, region, cityTown } =
-      req.body;
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res
         .status(400)
@@ -21,10 +20,6 @@ class AuthController {
       username,
       email,
       password: hashedPassword,
-      imageUrl,
-      country,
-      region,
-      cityTown,
     });
 
     const payload = { id: newUser.id, username };
