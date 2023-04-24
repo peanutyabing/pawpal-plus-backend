@@ -136,6 +136,26 @@ class AuthController {
         .json({ success: false, msg: "failed to erase token" });
     }
   };
+
+  changePassword = async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+    const { password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    try {
+      const updatePasswordRes = await this.model.update(
+        {
+          password: hashedPassword,
+          updatedAt: new Date(),
+        },
+        { where: { id: userId } }
+      );
+      res.json(updatePasswordRes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = AuthController;
