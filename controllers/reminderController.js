@@ -1,3 +1,4 @@
+const getUserIdFromToken = require("../utils/auth-helper.js");
 const { Op } = require("sequelize");
 const {
   calculateHoursSinceEvent,
@@ -12,9 +13,9 @@ class ReminderController {
   }
 
   getReminders = async (req, res) => {
-    const { userId } = req.params;
+    const userId = getUserIdFromToken(req);
     const remindableEvents = await this.getRemindableEvents(userId);
-    const reminders = await this.buildReminders(remindableEvents, userId);
+    const reminders = this.buildReminders(remindableEvents, userId);
     return res.json(reminders);
   };
 
