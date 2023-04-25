@@ -97,6 +97,7 @@ class EventController {
       imageUrl,
       remindMe,
     } = req.body;
+    console.log(req.body);
 
     await this.updatePreviousLatest(petId, subcategoryId);
 
@@ -109,7 +110,7 @@ class EventController {
         endTime,
         causeForConcern,
         description,
-        data,
+        data: Number(data),
         unit,
         imageUrl,
         remindMe,

@@ -2,7 +2,9 @@ const fs = require("fs");
 
 async function generateBreedsSeedData() {
   const dataFiles = [];
-  const dataPath = require("path").join(__dirname).replace("utils", "data");
+  const dataPath = require("path")
+    .join(__dirname)
+    .replace("utils", "data/breeds");
   fs.readdirSync(dataPath).forEach(function (file) {
     dataFiles.push(dataPath + "/" + file);
   });
