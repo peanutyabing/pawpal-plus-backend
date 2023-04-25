@@ -9,8 +9,7 @@ class AuthController {
   }
 
   signUp = async (req, res) => {
-    const { username, email, password, imageUrl, country, region, cityTown } =
-      req.body;
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res
         .status(400)
@@ -21,10 +20,6 @@ class AuthController {
       username,
       email,
       password: hashedPassword,
-      imageUrl,
-      country,
-      region,
-      cityTown,
     });
 
     const payload = { id: newUser.id, username };
@@ -139,6 +134,26 @@ class AuthController {
       return res
         .status(403)
         .json({ success: false, msg: "failed to erase token" });
+    }
+  };
+
+  changePassword = async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+    const { password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    try {
+      const updatePasswordRes = await this.model.update(
+        {
+          password: hashedPassword,
+          updatedAt: new Date(),
+        },
+        { where: { id: userId } }
+      );
+      res.json(updatePasswordRes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
     }
   };
 }

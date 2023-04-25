@@ -62,7 +62,7 @@ const postController = new PostController(posts);
 
 // inittializing Routers
 const userRouter = new UserRouter(userController, authenticateToken).routes();
-const authRouter = new AuthRouter(authController).routes();
+const authRouter = new AuthRouter(authController, authenticateToken).routes();
 const petRouter = new PetRouter(petController, authenticateToken).routes();
 const eventRouter = new EventRouter(
   eventController,

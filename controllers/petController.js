@@ -37,6 +37,16 @@ class PetController {
     try {
       const pets = await this.model.findAll({
         where: { userId },
+        include: [
+          {
+            model: this.speciesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.breedsModel,
+            attributes: ["name"],
+          },
+        ],
         order: [["created_at", "DESC"]],
       });
       return res.json(pets);
@@ -51,9 +61,17 @@ class PetController {
     try {
       const pet = await this.model.findAll({
         where: { userId, id: petId },
-        include: {
-          model: this.eventsModel,
-        },
+        include: [
+          {
+            model: this.speciesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.breedsModel,
+            attributes: ["name"],
+          },
+          { model: this.eventsModel },
+        ],
         order: [[{ model: this.eventsModel }, "startTime", "DESC"]],
       });
       return res.json(pet);
