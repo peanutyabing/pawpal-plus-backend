@@ -2,6 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
+const getUserIdFromToken = require("../utils/auth-helper.js");
 
 class AuthController {
   constructor(model) {
@@ -138,9 +139,7 @@ class AuthController {
   };
 
   changePassword = async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+    const userId = getUserIdFromToken(req);
     const { password } = req.body;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     try {

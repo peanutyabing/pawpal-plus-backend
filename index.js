@@ -37,6 +37,7 @@ const UserRouter = require("./routers/userRouter.js");
 const AuthRouter = require("./routers/authRouter.js");
 const PetRouter = require("./routers/petRouter.js");
 const EventRouter = require("./routers/eventRouter.js");
+const CategoryRouter = require("./routers/categoryRouter.js");
 const ReminderRouter = require("./routers/reminderRouter.js");
 const PostRouter = require("./routers/postRouter.js");
 
@@ -45,6 +46,7 @@ const UserController = require("./controllers/userController.js");
 const AuthController = require("./controllers/authController.js");
 const PetController = require("./controllers/petController.js");
 const EventController = require("./controllers/eventController.js");
+const CategoryController = require("./controllers/categoryController.js");
 const ReminderController = require("./controllers/reminderController.js");
 const PostController = require("./controllers/postController.js");
 
@@ -57,6 +59,7 @@ const userController = new UserController(user);
 const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
 const eventController = new EventController(event, category, subcategory, pet);
+const categoryController = new CategoryController(category, subcategory);
 const reminderController = new ReminderController(event, pet, subcategory);
 const postController = new PostController(posts);
 
@@ -68,6 +71,7 @@ const eventRouter = new EventRouter(
   eventController,
   authenticateToken
 ).routes();
+const categoryRouter = new CategoryRouter(categoryController).routes();
 const reminderRouter = new ReminderRouter(
   reminderController,
   authenticateToken
@@ -79,6 +83,7 @@ app.use("/user-profile", userRouter);
 app.use("/auth", authRouter);
 app.use("/my-pets", petRouter);
 app.use("/my-pets/:petId/events", eventRouter);
+app.use("/categories", categoryRouter);
 app.use("/my-reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);
 
