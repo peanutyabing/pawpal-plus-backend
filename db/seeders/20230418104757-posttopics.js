@@ -24,6 +24,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("topics", null, {});
+    await queryInterface.bulkDelete("posttopics", null, {});
   },
 };

@@ -1,7 +1,9 @@
 class PostController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, postTopicModel, topicModel) {
     this.model = model;
     this.commentModel = commentModel;
+    this.postTopicModel = postTopicModel;
+    this.topicModel = topicModel;
   }
 
   getComments = async (req, res) => {
@@ -19,7 +21,9 @@ class PostController {
 
   getAllPosts = async (req, res) => {
     try {
-      const posts = await this.model.findAll();
+      const posts = await this.model.findAll({
+        order: [["id", "DESC"]],
+      });
       return res.json(posts);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -48,6 +52,39 @@ class PostController {
     }
   };
 
+  getAllTopicsOfPost = async (req, res) => {
+    const { postId } = req.params;
+    try {
+      const posts = await this.postTopicModel.findAll({
+        where: { postId: postId },
+      });
+      return res.json(posts);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getTopicName = async (req, res) => {
+    const { topicId } = req.params;
+    try {
+      const posts = await this.topicModel.findByPk(topicId);
+      return res.json(posts);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getAllTopicName = async (req, res) => {
+    try {
+      const topics = await this.topicModel.findAll({
+        order: [["name"]],
+      });
+      return res.json(topics);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
   addComment = async (req, res) => {
     const { postId, userId } = req.params;
     const { content } = req.body;
@@ -65,14 +102,25 @@ class PostController {
 
   addNewPost = async (req, res) => {
     const { userId } = req.params;
-    const { title, content, pri } = req.body;
+    const { title, content, topicId } = req.body;
+
     try {
-      await this.Model.create({
-        userId,
-        title,
-        content,
-        pri,
-      });
+      await this.model
+        .create({
+          userId,
+          title,
+          content,
+        })
+        .then(async (result) => {
+          const postId = result.id;
+          console.log(postId, topicId);
+          await this.postTopicModel.create({
+            postId,
+            topicId,
+          });
+        });
+
+      console.log("added");
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

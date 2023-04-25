@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:3001",
+  origin: "http://localhost:3000",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -37,7 +37,7 @@ const http = require("http").Server(app);
 
 const socketIO = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 
@@ -46,6 +46,7 @@ let users = [];
 
 socketIO.on("connection", (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
+
   socket.on("message", (data) => {
     socketIO.emit("messageResponse", data);
   });
@@ -76,7 +77,7 @@ app.get("/api", (req, res) => {
   });
 });
 
-http.listen(PORT, () => {
+http.listen(8001, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
@@ -108,13 +109,15 @@ const {
   category,
   subcategory,
   comment,
+  posttopic,
+  topic,
 } = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const userController = new UserController(user);
 const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
-const postController = new PostController(post, comment);
+const postController = new PostController(post, comment, posttopic, topic);
 const eventController = new EventController(event, category, subcategory, pet);
 const reminderController = new ReminderController(event, pet, subcategory);
 
@@ -140,6 +143,6 @@ app.use("/my-pets/:petId/events", eventRouter);
 app.use("/my-reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);
 
-/* app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
-}); */
+});
