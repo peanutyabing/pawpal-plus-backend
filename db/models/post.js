@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     static associate(models) {
       this.belongsTo(models.user);
+      this.hasMany(models.comment);
     }
   }
   Post.init(
