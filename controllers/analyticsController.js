@@ -22,7 +22,7 @@ class AnalyticsController {
       const groupedEvents = await this.eventsModel.findAll({
         where: { petId },
         attributes: [
-          "category_id",
+          ["category_id", "id"],
           [
             sequelize.fn("COUNT", sequelize.col("category_id")),
             "no_of_activities",
@@ -51,7 +51,7 @@ class AnalyticsController {
       const groupedEvents = await this.eventsModel.findAll({
         where: { petId },
         attributes: [
-          "subcategory_id",
+          ["subcategory_id", "id"],
           [
             sequelize.fn("COUNT", sequelize.col("subcategory_id")),
             "no_of_activities",

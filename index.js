@@ -95,7 +95,7 @@ app.use("/user-profile", userRouter);
 app.use("/auth", authRouter);
 app.use("/my-pets", petRouter);
 app.use("/my-pets/:petId/events", eventRouter);
-app.use("/categories", categoryRouter);
+app.use("/", categoryRouter);
 app.use("/analytics/:petId", analyticsRouter);
 app.use("/my-reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);

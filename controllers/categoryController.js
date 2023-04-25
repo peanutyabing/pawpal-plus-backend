@@ -25,6 +25,15 @@ class CategoryController {
     }
   };
 
+  getAllSubcategories = async (req, res) => {
+    try {
+      const subcategories = await this.subcategoriesModel.findAll();
+      return res.json(subcategories);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
   addSubcategory = async (req, res) => {
     const { categoryId } = req.params;
     const { name } = req.body;

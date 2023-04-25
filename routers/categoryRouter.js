@@ -6,9 +6,16 @@ class CategoryRouter {
     this.controller = controller;
   }
   routes() {
-    router.get("/", this.controller.getCategories);
-    router.get("/:categoryId/subcategories", this.controller.getSubcategories);
-    router.post("/:categoryId/subcategories", this.controller.addSubcategory);
+    router.get("/categories", this.controller.getCategories);
+    router.get("/subcategories", this.controller.getAllSubcategories);
+    router.get(
+      "/categories/:categoryId/subcategories",
+      this.controller.getSubcategories
+    );
+    router.post(
+      "/categories/:categoryId/subcategories",
+      this.controller.addSubcategory
+    );
     return router;
   }
 }
