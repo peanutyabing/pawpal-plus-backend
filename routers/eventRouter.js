@@ -13,7 +13,6 @@ class EventRouter {
       this.authenticateToken,
       this.controller.getOneEvent
     );
-    // router.get("/filter", this.authenticateToken, this.controller.filterEvents);
     router.post("/", this.authenticateToken, this.controller.addEvent);
     router.put("/:eventId", this.authenticateToken, this.controller.editEvent);
     return router;

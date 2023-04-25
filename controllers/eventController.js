@@ -73,8 +73,6 @@ class EventController {
     }
   };
 
-  // filterEvents = async (req, res) => {};
-
   addEvent = async (req, res) => {
     const userId = getUserIdFromToken(req);
     const { petId } = req.params;
