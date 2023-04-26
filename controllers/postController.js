@@ -1,9 +1,10 @@
 class PostController {
-  constructor(model, commentModel, postTopicModel, topicModel) {
+  constructor(model, commentModel, postTopicModel, topicModel, userModel) {
     this.model = model;
     this.commentModel = commentModel;
     this.postTopicModel = postTopicModel;
     this.topicModel = topicModel;
+    this.userModel = userModel;
   }
 
   getComments = async (req, res) => {
@@ -11,6 +12,7 @@ class PostController {
     try {
       const comments = await this.commentModel.findAll({
         where: { postId: postId },
+        include: { model: this.userModel, attributes: ["username"] },
       });
       return res.json(comments);
     } catch (err) {

@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "http://localhost:3001",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -77,9 +77,9 @@ app.get("/api", (req, res) => {
   });
 });
 
-http.listen(8001, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+// http.listen(8001, () => {
+//   console.log(`Server listening on `);
+// });
 
 // importing Routers
 const UserRouter = require("./routers/userRouter.js");
@@ -121,7 +121,13 @@ const {
 const userController = new UserController(user);
 const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
-const postController = new PostController(post, comment, posttopic, topic);
+const postController = new PostController(
+  post,
+  comment,
+  posttopic,
+  topic,
+  user
+);
 const eventController = new EventController(event, category, subcategory, pet);
 const categoryController = new CategoryController(category, subcategory);
 const analyticsController = new AnalyticsController(
@@ -161,6 +167,6 @@ app.use("/analytics/:petId", analyticsRouter);
 app.use("/my-reminders", reminderRouter);
 app.use("/users/:userId/posts", postRouter);
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
 });
