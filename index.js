@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Auth middleware
 const authenticateToken = (req, res, next) => {
-  // Request header will include: Bearer <long and encrypted token>
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token === null) {
@@ -41,7 +41,6 @@ const socketIO = require("socket.io")(http, {
   },
 });
 
-//Add this before the app.get() block
 let users = [];
 
 socketIO.on("connection", (socket) => {
@@ -55,7 +54,6 @@ socketIO.on("connection", (socket) => {
   socket.on("newUser", (data) => {
     //Adds the new user to the list of users
     users.push(data);
-    // console.log(users);
     //Sends the list of users to the client
     socketIO.emit("newUserResponse", users);
   });
@@ -64,7 +62,6 @@ socketIO.on("connection", (socket) => {
     console.log("🔥: A user disconnected");
     //Updates the list of users when a user disconnects from the server
     users = users.filter((user) => user.socketID !== socket.id);
-    // console.log(users);
     //Sends the list of users to the client
     socketIO.emit("newUserResponse", users);
     socket.disconnect();
@@ -76,10 +73,6 @@ app.get("/api", (req, res) => {
     message: "Hello world",
   });
 });
-
-// http.listen(8001, () => {
-//   console.log(`Server listening on `);
-// });
 
 // importing Routers
 const UserRouter = require("./routers/userRouter.js");
