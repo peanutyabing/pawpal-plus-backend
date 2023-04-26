@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     static associate(models) {
       this.belongsTo(models.user);
+      this.hasMany(models.comment);
     }
   }
   Post.init(
@@ -15,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
 
       content: DataTypes.STRING,
-      private: DataTypes.BOOLEAN,
     },
     {
       sequelize,
