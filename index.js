@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:3001",
+  origin: "http://localhost:3000",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -32,6 +32,55 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+//socket io
+const http = require("http").Server(app);
+
+const socketIO = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+  },
+});
+
+//Add this before the app.get() block
+let users = [];
+
+socketIO.on("connection", (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`);
+
+  socket.on("message", (data) => {
+    socketIO.emit("messageResponse", data);
+  });
+
+  //Listens when a new user joins the server
+  socket.on("newUser", (data) => {
+    //Adds the new user to the list of users
+    users.push(data);
+    // console.log(users);
+    //Sends the list of users to the client
+    socketIO.emit("newUserResponse", users);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔥: A user disconnected");
+    //Updates the list of users when a user disconnects from the server
+    users = users.filter((user) => user.socketID !== socket.id);
+    // console.log(users);
+    //Sends the list of users to the client
+    socketIO.emit("newUserResponse", users);
+    socket.disconnect();
+  });
+});
+
+app.get("/api", (req, res) => {
+  res.json({
+    message: "Hello world",
+  });
+});
+
+http.listen(8001, () => {
+  console.log(`Server listening on ${PORT}`);
+});
+
 // importing Routers
 const UserRouter = require("./routers/userRouter.js");
 const AuthRouter = require("./routers/authRouter.js");
@@ -54,12 +103,25 @@ const PostController = require("./controllers/postController.js");
 
 // importing DB
 const db = require("./db/models/index.js");
-const { user, pet, event, posts, species, breed, category, subcategory } = db;
+const {
+  user,
+  pet,
+  event,
+  post,
+  species,
+  breed,
+  category,
+  subcategory,
+  comment,
+  posttopic,
+  topic,
+} = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const userController = new UserController(user);
 const authController = new AuthController(user);
 const petController = new PetController(pet, event, species, breed);
+const postController = new PostController(post, comment, posttopic, topic);
 const eventController = new EventController(event, category, subcategory, pet);
 const categoryController = new CategoryController(category, subcategory);
 const analyticsController = new AnalyticsController(
@@ -69,7 +131,6 @@ const analyticsController = new AnalyticsController(
   pet
 );
 const reminderController = new ReminderController(event, pet, subcategory);
-const postController = new PostController(posts);
 
 // inittializing Routers
 const userRouter = new UserRouter(userController, authenticateToken).routes();
