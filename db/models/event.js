@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       endTime: { type: DataTypes.DATE },
       causeForConcern: { type: DataTypes.BOOLEAN, defaultValue: false },
       description: DataTypes.STRING,
-      data: DataTypes.INTEGER,
+      data: DataTypes.FLOAT,
       unit: DataTypes.STRING,
       imageUrl: DataTypes.STRING,
       remindMe: { type: DataTypes.BOOLEAN, defaultValue: false },

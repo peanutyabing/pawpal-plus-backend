@@ -8,7 +8,6 @@ class EventController {
     this.petsModel = petsModel;
   }
 
-  // Event content
   getPetEvents = async (req, res) => {
     const userId = getUserIdFromToken(req);
     const { petId } = req.params;
@@ -40,6 +39,40 @@ class EventController {
     }
   };
 
+  getOneEvent = async (req, res) => {
+    const userId = getUserIdFromToken(req);
+    const { petId, eventId } = req.params;
+    try {
+      await this.petsModel.findOne({
+        where: { id: petId, userId },
+      });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: "Pet not found" });
+    }
+    try {
+      const event = await this.model.findOne({
+        where: { id: eventId, petId },
+        include: [
+          {
+            model: this.categoriesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.subcategoriesModel,
+            attributes: ["name"],
+          },
+          {
+            model: this.petsModel,
+            attributes: ["name", "imageUrl"],
+          },
+        ],
+      });
+      return res.json(event);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
   addEvent = async (req, res) => {
     const userId = getUserIdFromToken(req);
     const { petId } = req.params;
@@ -62,6 +95,7 @@ class EventController {
       imageUrl,
       remindMe,
     } = req.body;
+    console.log(req.body);
 
     await this.updatePreviousLatest(petId, subcategoryId);
 
@@ -74,7 +108,7 @@ class EventController {
         endTime,
         causeForConcern,
         description,
-        data,
+        data: Number(data),
         unit,
         imageUrl,
         remindMe,
@@ -154,42 +188,6 @@ class EventController {
         order: [["startTime", "DESC"]],
       });
       return res.json(events);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  // Event categorization
-  getCategories = async (req, res) => {
-    try {
-      const categories = await this.categoriesModel.findAll();
-      return res.json(categories);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  getSubcategories = async (req, res) => {
-    const { categoryId } = req.params;
-    try {
-      const subcategories = await this.subcategoriesModel.findAll({
-        where: { categoryId },
-      });
-      return res.json(subcategories);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  addSubcategory = async (req, res) => {
-    const { categoryId } = req.params;
-    const { name } = req.body;
-    try {
-      const newSubcategory = await this.subcategoriesModel.create({
-        categoryId,
-        name,
-      });
-      return res.json(newSubcategory);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

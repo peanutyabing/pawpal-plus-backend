@@ -48,7 +48,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       data: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       unit: {
         type: Sequelize.STRING,
