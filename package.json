@@ -2,7 +2,7 @@
   "name": "project3-backend-bootcamp",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodem index.js"
   },
   "dependencies": {
@@ -19,7 +19,9 @@
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "eslint": "^8.16.0",
+    "mocha": "^10.2.0",
     "sequelize-cli": "^6.6.0"
   },
   "description": "Run `npm i` to install NPM packages, then `npm start` to start the Express server.",
